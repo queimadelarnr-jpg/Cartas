@@ -194,6 +194,19 @@ body {
     transition: opacity .2s;
 }
 
+.envelope-stamp {
+    position: absolute;
+    z-index: 5;
+    right: 8%;
+    bottom: 8%;
+    width: clamp(64px, 22vw, 88px);
+    aspect-ratio: 1;
+    object-fit: contain;
+    pointer-events: none;
+    transform: translate(var(--stamp-x, 0px), var(--stamp-y, 0px)) rotate(var(--stamp-tilt, 0deg));
+    transform-origin: center;
+}
+
 .letter-row.is-open .envelope-flap {
     transform: rotateX(180deg);
 }
@@ -303,17 +316,6 @@ body {
 
 .letter-copy p {
     margin: 0 0 18px;
-}
-
-/* Selo de Roma no canto inferior direito, com pequenas variações por abertura. */
-.letter-stamp {
-    display: block;
-    width: clamp(76px, 22vw, 96px);
-    aspect-ratio: 1;
-    object-fit: contain;
-    margin: 22px 0 0 auto;
-    transform: translate(var(--stamp-x, 0px), var(--stamp-y, 0px)) rotate(var(--stamp-tilt, 0deg));
-    transform-origin: center;
 }
 
 /* 6. Botão para guardar a carta -------------------------- */

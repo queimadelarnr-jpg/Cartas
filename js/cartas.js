@@ -43,7 +43,12 @@
       const button = document.createElement('button');
       button.type = 'button'; button.className='letter-card'; button.disabled=!unlocked;
       button.setAttribute('aria-label', unlocked ? `Abrir carta de ${formatLongDate(letter.date)}` : `Carta fechada até ${formatLongDate(letter.date)}`);
-      button.innerHTML='<span class="envelope"><span class="envelope-flap"></span><span class="seal" aria-hidden="true">♥</span></span>';
+      button.innerHTML='<span class="envelope"><span class="envelope-flap"></span><span class="seal" aria-hidden="true">♥</span><img class="envelope-stamp" src="img/roma-26-stamp.png" alt="" aria-hidden="true"></span>';
+      const stamp = button.querySelector('.envelope-stamp');
+      // Keep each stamp near the lower-right corner with a small hand-placed variation.
+      stamp.style.setProperty('--stamp-x', `${Math.round(Math.random()*8-4)}px`);
+      stamp.style.setProperty('--stamp-y', `${Math.round(Math.random()*8-4)}px`);
+      stamp.style.setProperty('--stamp-tilt', `${Math.round(Math.random()*10-5)}deg`);
       const meta=document.createElement('div'); meta.className='letter-meta';
       const date=document.createElement('span'); date.textContent=formatDate(letter.date);
       const status=document.createElement('span'); status.className='letter-status'; status.textContent=opened.has(letter.date)?'já lida':unlocked?'aberta':'fechada';
@@ -58,15 +63,6 @@
     try { localStorage.setItem(storageKey,JSON.stringify([...opened])); } catch (_) {}
     dateEl.textContent=formatDate(letter.date); heading.textContent=letter.title;
     copy.replaceChildren(...letter.paragraphs.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
-    const stamp=document.createElement('img');
-    stamp.className='letter-stamp';
-    stamp.src='img/roma-26-stamp.png';
-    stamp.alt='Selo postal Roma 2026';
-    // Small bounded offsets and rotation make each opening feel hand-stamped.
-    stamp.style.setProperty('--stamp-x', `${Math.round(Math.random()*14-7)}px`);
-    stamp.style.setProperty('--stamp-y', `${Math.round(Math.random()*10-5)}px`);
-    stamp.style.setProperty('--stamp-tilt', `${Math.round(Math.random()*12-6)}deg`);
-    copy.append(stamp);
     list.hidden=true; reading.hidden=false; renderList(); window.scrollTo({top:0,behavior:'smooth'}); back.focus({preventScroll:true});
   }
   function showList(){reading.hidden=true;list.hidden=false;renderList();window.scrollTo({top:0,behavior:'smooth'});}

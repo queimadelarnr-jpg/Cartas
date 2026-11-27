@@ -1,0 +1,395 @@
+/* =========================================================
+   CARTAS PARA A MARIANA
+   Guia rápido: altera as cores em 1. Cores e tipografia.
+   As dimensões e espaçamentos estão agrupados por componente.
+   ========================================================= */
+
+/* 1. Cores e tipografia ---------------------------------- */
+@font-face {
+    font-family: "Cartas Serif";
+    src: url("../fonts/InstrumentSerif-Regular.woff") format("woff");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Cartas Serif";
+    src: url("../fonts/InstrumentSerif-Italic.woff") format("woff");
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    --cor-fundo: #ffd0a0;
+    --cor-texto: #34231e;
+    --cor-suave: #795f52;
+    --cor-linha: #e95d49;
+    --cor-selo: #b52a26;
+    --cor-botao-voltar: #d88949;
+    --cor-botao-voltar-hover: #bd713a;
+    --cor-envelope: #e9ddd0;
+    --cor-envelope-frente: #f2ede8;
+    --cor-envelope-dobra: #d9cec5;
+    --cor-envelope-aba: #f5f0e9;
+    --largura-conteudo: 480px;
+    --proporcao-envelope: 1.42 / 1;
+}
+
+/* 2. Base da página -------------------------------------- */
+[hidden] {
+    display: none !important;
+}
+
+html,
+body {
+    min-height: 100%;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: var(--cor-fundo);
+}
+
+body {
+    display: block;
+    color: var(--cor-texto);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.letters-app {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: 28px 20px max(24px, env(safe-area-inset-bottom));
+    background: var(--cor-fundo);
+}
+
+/* Linha vertical ao centro, como no esquema de referência. */
+.letters-app::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--cor-linha);
+    opacity: .65;
+    pointer-events: none;
+    content: "";
+}
+
+.letters-header,
+.letters-main,
+.letters-footer {
+    position: relative;
+    z-index: 1;
+    max-width: var(--largura-conteudo);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* 3. Cabeçalho ------------------------------------------- */
+.letters-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.letters-eyebrow {
+    margin: 0 0 18px;
+    color: var(--cor-suave);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.letters-header h1 {
+    margin: 0;
+    color: var(--cor-texto);
+    font: bold clamp(48px, 15vw, 64px)/.82 "Cartas Serif", Georgia, serif;
+    letter-spacing: -.045em;
+    text-transform: none;
+}
+
+.letters-header h1 em {
+    font-weight: 600;
+}
+
+.letters-intro {
+    margin: 22px 0 0;
+    color: var(--cor-suave);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+/* 4. Lista de cartas ------------------------------------- */
+.letters-list {
+    display: grid;
+    gap: 25px;
+}
+
+.letter-row {
+    display: block;
+}
+
+.letter-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--proporcao-envelope);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    perspective: 800px;
+}
+
+/* Envelope: a caixa, o papel, a aba e o selo. */
+.envelope {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0 0 20px 20px;
+    background: var(--cor-envelope);
+    box-shadow: 0 5px 18px #9e654120;
+    transition: transform .25s, filter .25s;
+}
+
+.envelope::before,
+.envelope::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+}
+
+.envelope::before {
+    z-index: 2;
+    background: var(--cor-envelope-frente);
+    clip-path: polygon(0 0, 100% 0, 50% 78%);
+}
+
+.envelope::after {
+    z-index: 1;
+    background: var(--cor-envelope-dobra);
+    clip-path: polygon(0 0, 50% 78%, 100% 0);
+}
+
+.envelope-flap {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 52%;
+    background: var(--cor-envelope-aba);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform .28s;
+}
+
+.seal {
+    position: absolute;
+    z-index: 4;
+    top: 58%;
+    left: 50%;
+    display: grid;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--cor-selo);
+    color: #fff;
+    font-size: 12px;
+    place-items: center;
+    transform: translateX(-50%);
+    transition: opacity .2s;
+}
+
+.letter-row.is-open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.letter-row.is-open .seal {
+    opacity: 0;
+}
+
+.letter-card:hover .envelope {
+    filter: brightness(.98);
+    transform: translateY(-2px);
+}
+
+.letter-card:focus-visible,
+.letter-back:focus-visible,
+.letter-download:focus-visible {
+    outline: 2px solid var(--cor-linha);
+    outline-offset: 4px;
+}
+
+.letter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 5px 0;
+    font-size: 16px;
+}
+
+.letter-status {
+    color: var(--cor-suave);
+    font-size: 16px;
+    letter-spacing: .04em;
+}
+
+.letter-row.is-locked .letter-card {
+    cursor: not-allowed;
+    filter: saturate(.68);
+    opacity: .82;
+}
+
+.letter-row.is-locked .letter-status {
+    color: #8c4b3d;
+}
+
+.letter-hint {
+    margin: 7px 5px 0;
+    color: #8a5747;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: right;
+}
+
+.letter-row:not(.is-locked) .letter-card:active .envelope {
+    transform: scale(.99);
+}
+
+/* 5. Leitura da carta ------------------------------------ */
+.letter-reading {
+    max-width: 490px;
+    min-height: 55svh;
+    margin: 4px auto 0;
+}
+
+.letter-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.letter-date {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.letter-back {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    padding-bottom: 5px;
+    border-radius: 50%;
+    background: var(--cor-botao-voltar);
+    color: white;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform .2s, background .2s;
+}
+
+.letter-back:hover {
+    background: var(--cor-botao-voltar-hover);
+    transform: translateX(-3px);
+}
+
+.letter-heading {
+    margin: 0 0 25px;
+    font: 400 clamp(36px, 9vw, 54px)/.95 "Cartas Serif", Georgia, serif;
+    letter-spacing: -.02em;
+}
+
+.letter-copy {
+    color: #382a25;
+    font-size: 16px;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.letter-copy p {
+    margin: 0 0 18px;
+}
+
+/* 6. Botão para guardar a carta -------------------------- */
+.letter-download {
+    margin-top: 32px;
+    padding: 10px 20px;
+    border: 1px solid #9d6953;
+    border-radius: 99px;
+    background: transparent;
+    color: var(--cor-texto);
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    min-height: 48px;
+}
+
+.letter-download:hover {
+    background: var(--cor-texto);
+    color: #fff;
+}
+
+.letter-download span {
+    padding-left: 14px;
+    font-size: 17px;
+}
+
+/* 7. Rodapé ---------------------------------------------- */
+.letters-footer {
+    margin-top: 36px;
+    color: var(--cor-suave);
+    font: italic 18px "Cartas Serif", Georgia, serif;
+    text-align: center;
+}
+
+.letters-footer span {
+    color: var(--cor-selo);
+}
+
+/* 8. Ajustes para telemóveis compactos ------------------- */
+@media (max-width: 380px) {
+    .letters-app {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .letters-header h1 {
+        font-size: 46px;
+    }
+
+    .letters-list {
+        gap: 22px;
+    }
+}
+
+/* 9. Ecrãs maiores --------------------------------------- */
+@media (min-width: 700px) {
+    .letters-app {
+        padding-top: 38px;
+    }
+
+    .letters-header {
+        margin-bottom: 32px;
+    }
+
+    .letter-reading {
+        padding-top: 10px;
+    }
+}
+
+/* 10. Acessibilidade: reduzir movimento ----------------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+}

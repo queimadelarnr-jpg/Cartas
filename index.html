@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffd0a0">
+  <meta name="description" content="Uma carta para cada dia das férias da Mariana.">
+  <title>Cartas para a Mariana</title>
+  <link rel="stylesheet" href="css/cartas.css">
+</head>
+<body>
+  <div class="letters-app" id="letters-app">
+    <header class="letters-header">
+      <p class="letters-eyebrow">UM PRESENTE PARA TI</p>
+      <h1>Cartas para<br><em>a Mariana</em></h1>
+      <p class="letters-intro">Uma carta para cada dia das tuas férias.<br>Abre uma por dia, quando chegar a hora. ♡</p>
+    </header>
+    <main class="letters-main">
+      <div class="letters-list" id="letters-list" aria-label="Cartas das férias"></div>
+      <section class="letter-reading" id="letter-reading" hidden aria-live="polite">
+        <div class="letter-topline">
+          <span class="letter-date" id="letter-date"></span>
+          <button class="letter-back" id="letter-back" type="button" aria-label="Voltar às cartas">←</button>
+        </div>
+        <h2 class="letter-heading" id="letter-heading"></h2>
+        <div class="letter-copy" id="letter-copy"></div>
+        <button class="letter-download" id="letter-download" type="button">Guardar esta carta <span>↓</span></button>
+      </section>
+    </main>
+    <footer class="letters-footer">Feito com amor, só para ti <span>♥</span></footer>
+  </div>
+  <script src="js/cartas.js"></script>
+</body>
+</html>

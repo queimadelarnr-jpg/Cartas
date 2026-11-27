@@ -199,7 +199,7 @@ body {
     z-index: 5;
     right: 8%;
     bottom: 8%;
-    width: clamp(64px, 22vw, 88px);
+    width: clamp(51px, 17.6vw, 70px);
     aspect-ratio: 1;
     object-fit: contain;
     pointer-events: none;

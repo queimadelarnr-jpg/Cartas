@@ -62,18 +62,7 @@ body {
     background: var(--cor-fundo);
 }
 
-/* Linha vertical ao centro, como no esquema de referência. */
-.letters-app::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    background: var(--cor-linha);
-    opacity: .65;
-    pointer-events: none;
-    content: "";
-}
+
 
 .letters-header,
 .letters-main,

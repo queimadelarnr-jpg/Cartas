@@ -58,6 +58,15 @@
     try { localStorage.setItem(storageKey,JSON.stringify([...opened])); } catch (_) {}
     dateEl.textContent=formatDate(letter.date); heading.textContent=letter.title;
     copy.replaceChildren(...letter.paragraphs.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
+    const stamp=document.createElement('img');
+    stamp.className='letter-stamp';
+    stamp.src='img/roma-26-stamp.png';
+    stamp.alt='Selo postal Roma 2026';
+    // Small bounded offsets and rotation make each opening feel hand-stamped.
+    stamp.style.setProperty('--stamp-x', `${Math.round(Math.random()*14-7)}px`);
+    stamp.style.setProperty('--stamp-y', `${Math.round(Math.random()*10-5)}px`);
+    stamp.style.setProperty('--stamp-tilt', `${Math.round(Math.random()*12-6)}deg`);
+    copy.append(stamp);
     list.hidden=true; reading.hidden=false; renderList(); window.scrollTo({top:0,behavior:'smooth'}); back.focus({preventScroll:true});
   }
   function showList(){reading.hidden=true;list.hidden=false;renderList();window.scrollTo({top:0,behavior:'smooth'});}

@@ -11,6 +11,7 @@
     { date: '2026-12-05', title: 'Ciao Roma, Olá Portugal!', paragraphs: ['Oláaaa amor!', 'O último dia destas férias chegou e esta  é a última carta desta coleção. Mas isto é só o fim deste pequeno calendário. Espero que tenhas aproveitado muito e que voltes com o coração cheio! Espero por ti como nos filmes românticos, no aeroporto!', 'Mal posso esperar para te ter de volta perto de mim.\n\nAmo-te,\nLuigi!'] }
   ];
   const list = document.querySelector('#letters-list');
+  const heartsLayer = document.querySelector('.floating-hearts');
   const reading = document.querySelector('#letter-reading');
   const dateEl = document.querySelector('#letter-date');
   const heading = document.querySelector('#letter-heading');
@@ -18,6 +19,24 @@
   const back = document.querySelector('#letter-back');
   const download = document.querySelector('#letter-download');
   const storageKey = 'cartas-mariana-opened-v2';
+  let openingLetter = false;
+
+  // Low-contrast hearts drift behind the page at varied sizes and speeds.
+  for (let i = 0; i < 13; i++) {
+    const heart = document.createElement('img');
+    heart.className = 'floating-heart';
+    heart.src = 'img/heart.png';
+    heart.alt = '';
+    heart.style.setProperty('--heart-left', `${Math.round(Math.random() * 96)}%`);
+    heart.style.setProperty('--heart-size', `${14 + Math.round(Math.random() * 24)}px`);
+    heart.style.setProperty('--heart-duration', `${18 + Math.round(Math.random() * 19)}s`);
+    heart.style.setProperty('--heart-delay', `${-Math.round(Math.random() * 35)}s`);
+    heart.style.setProperty('--heart-opacity', `${(0.1 + Math.random() * 0.13).toFixed(2)}`);
+    heart.style.setProperty('--heart-tilt', `${Math.round(Math.random() * 32 - 16)}deg`);
+    heart.style.setProperty('--heart-drift', `${Math.round(Math.random() * 100 - 50)}px`);
+    heartsLayer.append(heart);
+  }
+
   let opened = new Set();
   try { opened = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]')); } catch (_) {}
   let active = 0;
@@ -58,14 +77,34 @@
     });
   }
   function openLetter(index) {
-    const letter=letters[index]; if(!isUnlocked(letter)) return;
-    active=index; opened.add(letter.date);
-    try { localStorage.setItem(storageKey,JSON.stringify([...opened])); } catch (_) {}
-    dateEl.textContent=formatDate(letter.date); heading.textContent=letter.title;
-    copy.replaceChildren(...letter.paragraphs.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
-    list.hidden=true; reading.hidden=false; renderList(); window.scrollTo({top:0,behavior:'smooth'}); back.focus({preventScroll:true});
+    const letter=letters[index];
+    if(!isUnlocked(letter) || openingLetter) return;
+    openingLetter=true;
+    const row=list.children[index];
+    row.classList.add('is-opening');
+
+    const showLetter=()=>{
+      active=index; opened.add(letter.date);
+      try { localStorage.setItem(storageKey,JSON.stringify([...opened])); } catch (_) {}
+      dateEl.textContent=formatDate(letter.date); heading.textContent=letter.title;
+      copy.replaceChildren(...letter.paragraphs.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
+      list.hidden=true; reading.hidden=false;
+      reading.classList.remove('is-entering');
+      void reading.offsetWidth;
+      reading.classList.add('is-entering');
+      renderList();
+      window.scrollTo({top:0,behavior:'smooth'});
+      back.focus({preventScroll:true});
+      window.setTimeout(()=>{
+        reading.classList.remove('is-entering');
+        openingLetter=false;
+      }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 740);
+    };
+
+    window.setTimeout(showLetter,
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 540);
   }
-  function showList(){reading.hidden=true;list.hidden=false;renderList();window.scrollTo({top:0,behavior:'smooth'});}
+  function showList(){reading.classList.remove('is-entering');reading.hidden=true;list.hidden=false;renderList();window.scrollTo({top:0,behavior:'smooth'});}
   back.addEventListener('click',showList);
   download.addEventListener('click',()=>{
     const letter=letters[active];
